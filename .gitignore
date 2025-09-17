@@ -1,0 +1,34 @@
+import csv
+arq_csv = 'clientes_mercado_livre.csv'
+arq_sql = 'clientes_mercado_livre.sql'
+with open(arq_sql, 'w',encoding='utf-8') as sql_file:
+  sql_file.write("CREATE DATABASE IF NOT EXISTS BI_mercado_livre;\n")
+  sql_file.write("USE BI_mercado_livre;\n")
+  sql_file.write("CREATE TABLE clientes (\n")
+  sql_file.write("  id_cliente INT AUTO_INCREMENT PRIMARY KEY,\n")
+  sql_file.write("  nome VARCHAR(255) NOT NULL,\n")
+  sql_file.write("  email VARCHAR(100)NOT NULL,\n")
+  sql_file.write("  idade int NOT NULL,\n")
+  sql_file.write("  cidade VARCHAR(100) NOT NULL,\n")
+  sql_file.write("  estado VARCHAR(100) NOT NULL,\n")
+  sql_file.write("  data_cadastro DATE NOT NULL,\n")
+  sql_file.write("  total_compras int NOT NULL,\n")
+  sql_file.write("  status VARCHAR(50) NOT NULL \n")
+  sql_file.write(");\n\n")
+  with open(arq_csv, 'r', encoding='utf-8') as csv_file:
+    leitor = csv.DictReader(csv_file)
+    for linha in leitor:
+      id_cliente = linha['id_cliente']
+      nome = linha['nome']
+      email = linha['email']
+      idade= linha['idade']
+      cidade = linha['cidade']
+      estado = linha['estado']
+      data_cadastro = linha['data_cadastro']
+      total_compras = linha['total_compras']
+      status = linha['status']
+
+      sql_file.write(
+          f"INSERT INTO clientes (nome, email, idade, cidade, estado, data_cadastro, total_compras, status)\n"
+          f"VALUES ('{nome}', '{email}', {idade}, '{cidade}', '{estado}', '{data_cadastro}', {total_compras}, '{status}');\n"
+      )
